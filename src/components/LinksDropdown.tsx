@@ -24,8 +24,12 @@ function GoToLink(props: {
   const navigate = useNavigate();
 
   const goTo = (href: string) => {
-    if (href.startsWith("http")) window.open(href, "_blank");
-    else navigate(href);
+    if (href.startsWith("http")) {
+      window.open(href, "_blank");
+    } else {
+      window.scrollTo(0, 0);
+      navigate(href);
+    }
   };
 
   return (
@@ -109,7 +113,7 @@ export function LinksDropdown(props: { children: React.ReactNode }) {
   return (
     <div className="relative is-dropdown">
       <div
-        className="cursor-pointer tabbable rounded-full flex gap-2 text-white items-center py-2 px-3 bg-pill-background bg-opacity-50 hover:bg-pill-backgroundHover transition-[background,transform] duration-100 hover:scale-105"
+        className="cursor-pointer tabbable rounded-full flex gap-2 text-white items-center py-2 px-3 bg-pill-background bg-opacity-50 hover:bg-pill-backgroundHover backdrop-blur-lg transition-[background,transform] duration-100 hover:scale-105"
         tabIndex={0}
         onClick={toggleOpen}
         onKeyUp={(evt) => evt.key === "Enter" && toggleOpen()}
@@ -142,8 +146,8 @@ export function LinksDropdown(props: { children: React.ReactNode }) {
           <DropdownLink href="/about" icon={Icons.CIRCLE_QUESTION}>
             {t("navigation.menu.about")}
           </DropdownLink>
-          <DropdownLink href={conf().DONATION_LINK} icon={Icons.DONATION}>
-            {t("navigation.menu.donation")}
+          <DropdownLink href="/discover" icon={Icons.RISING_STAR}>
+            {t("navigation.menu.discover")}
           </DropdownLink>
           {deviceName ? (
             <DropdownLink
@@ -162,9 +166,10 @@ export function LinksDropdown(props: { children: React.ReactNode }) {
             />
             <CircleDropdownLink href={conf().GITHUB_LINK} icon={Icons.GITHUB} />
             <CircleDropdownLink
-              href={conf().DONATION_LINK}
-              icon={Icons.DONATION}
+              href={conf().TWITTER_LINK}
+              icon={Icons.TWITTER}
             />
+            <CircleDropdownLink href="/support" icon={Icons.MAIL} />
           </div>
         </div>
       </Transition>

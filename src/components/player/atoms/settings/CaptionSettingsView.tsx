@@ -216,7 +216,13 @@ export function CaptionSetting(props: {
 
 export const colors = ["#ffffff", "#b0b0b0", "#80b1fa", "#e2e535"];
 
-export function CaptionSettingsView({ id }: { id: string }) {
+export function CaptionSettingsView({
+  id,
+  overlayBackLink,
+}: {
+  id: string;
+  overlayBackLink?: boolean;
+}) {
   const { t } = useTranslation();
   const router = useOverlayRouter(id);
   const styling = useSubtitleStore((s) => s.styling);
@@ -228,10 +234,14 @@ export function CaptionSettingsView({ id }: { id: string }) {
 
   return (
     <>
-      <Menu.BackLink onClick={() => router.navigate("/captions")}>
+      <Menu.BackLink
+        onClick={() =>
+          router.navigate(overlayBackLink ? "/captionsOverlay" : "/captions")
+        }
+      >
         {t("player.menus.subtitles.settings.backlink")}
       </Menu.BackLink>
-      <Menu.Section className="space-y-6">
+      <Menu.Section className="space-y-6 pb-5">
         <CaptionSetting
           label={t("player.menus.subtitles.settings.delay")}
           max={10}
@@ -253,6 +263,17 @@ export function CaptionSettingsView({ id }: { id: string }) {
             />
           </div>
         </div>
+        <div className="flex justify-between items-center">
+          <Menu.FieldTitle>
+            {t("settings.subtitles.textBoldLabel")}
+          </Menu.FieldTitle>
+          <div className="flex justify-center items-center">
+            <Toggle
+              enabled={styling.bold}
+              onClick={() => updateStyling({ bold: !styling.bold })}
+            />
+          </div>
+        </div>
         <Menu.Divider />
         <CaptionSetting
           label={t("settings.subtitles.backgroundLabel")}
@@ -260,6 +281,14 @@ export function CaptionSettingsView({ id }: { id: string }) {
           min={0}
           onChange={(v) => updateStyling({ backgroundOpacity: v / 100 })}
           value={styling.backgroundOpacity * 100}
+          textTransformer={(s) => `${s}%`}
+        />
+        <CaptionSetting
+          label={t("settings.subtitles.backgroundBlurLabel")}
+          max={100}
+          min={0}
+          onChange={(v) => updateStyling({ backgroundBlur: v / 100 })}
+          value={styling.backgroundBlur * 100}
           textTransformer={(s) => `${s}%`}
         />
         <CaptionSetting

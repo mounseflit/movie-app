@@ -14,6 +14,7 @@ const tokens = {
     c900: "#0b1822"
   },
   shade: {
+    c25: "#5db3a8",
     c50: "#677c90",
     c100: "#52667a",
     c200: "#3f4f60",
@@ -63,7 +64,9 @@ export default createTheme({
       pill: {
         background: tokens.shade.c300,
         backgroundHover: tokens.shade.c200,
-        highlight: tokens.blue.c200
+        highlight: tokens.blue.c200,
+
+        activeBackground: tokens.shade.c300,
       },
 
       global: {
@@ -95,6 +98,10 @@ export default createTheme({
         accentB: tokens.blue.c500
       },
 
+      modal: {
+        background: tokens.shade.c800,
+      },
+
       type: {
         logo: tokens.purple.c100,
         text: tokens.shade.c50,
@@ -107,6 +114,7 @@ export default createTheme({
 
       search: {
         background: tokens.shade.c500,
+        hoverBackground: tokens.shade.c600,
         focused: tokens.shade.c400,
         placeholder: tokens.shade.c100,
         icon: tokens.shade.c100
@@ -114,7 +122,7 @@ export default createTheme({
 
       mediaCard: {
         hoverBackground: tokens.shade.c600,
-        hoverAccent: tokens.shade.c50,
+        hoverAccent: tokens.shade.c25,
         hoverShadow: tokens.shade.c900,
         shadow: tokens.shade.c700,
         barColor: tokens.ash.c200,

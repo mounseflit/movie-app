@@ -1,3 +1,4 @@
+import merge from "lodash.merge";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
@@ -17,6 +18,16 @@ export interface SubtitleStyling {
    * background opacity, ranges between 0 and 1
    */
   backgroundOpacity: number;
+
+  /**
+   * background blur, ranges between 0 and 1
+   */
+  backgroundBlur: number;
+
+  /**
+   * bold, boolean
+   */
+  bold: boolean;
 }
 
 export interface SubtitleStore {
@@ -25,11 +36,13 @@ export interface SubtitleStore {
   };
   enabled: boolean;
   lastSelectedLanguage: string | null;
+  isOpenSubtitles: boolean;
   styling: SubtitleStyling;
   overrideCasing: boolean;
   delay: number;
   updateStyling(newStyling: Partial<SubtitleStyling>): void;
   setLanguage(language: string | null): void;
+  setIsOpenSubtitles(isOpenSubtitles: boolean): void;
   setCustomSubs(): void;
   setOverrideCasing(enabled: boolean): void;
   setDelay(delay: number): void;
@@ -45,12 +58,15 @@ export const useSubtitleStore = create(
         lastSelectedLanguage: null,
       },
       lastSelectedLanguage: null,
+      isOpenSubtitles: false,
       overrideCasing: false,
       delay: 0,
       styling: {
         color: "#ffffff",
         backgroundOpacity: 0.5,
         size: 1,
+        backgroundBlur: 0.5,
+        bold: false,
       },
       resetSubtitleSpecificSettings() {
         set((s) => {
@@ -61,17 +77,31 @@ export const useSubtitleStore = create(
       updateStyling(newStyling) {
         set((s) => {
           if (newStyling.backgroundOpacity !== undefined)
-            s.styling.backgroundOpacity = newStyling.backgroundOpacity;
+            s.styling.backgroundOpacity = Math.min(
+              1,
+              Math.max(0, newStyling.backgroundOpacity),
+            );
+          if (newStyling.backgroundBlur !== undefined)
+            s.styling.backgroundBlur = Math.min(
+              1,
+              Math.max(0, newStyling.backgroundBlur),
+            );
           if (newStyling.color !== undefined)
             s.styling.color = newStyling.color.toLowerCase();
           if (newStyling.size !== undefined)
-            s.styling.size = Math.min(2, Math.max(0.01, newStyling.size));
+            s.styling.size = Math.min(10, Math.max(0.01, newStyling.size));
+          if (newStyling.bold !== undefined) s.styling.bold = newStyling.bold;
         });
       },
       setLanguage(lang) {
         set((s) => {
           s.enabled = !!lang;
           if (lang) s.lastSelectedLanguage = lang;
+        });
+      },
+      setIsOpenSubtitles(isOpenSubtitles) {
+        set((s) => {
+          s.isOpenSubtitles = isOpenSubtitles;
         });
       },
       setCustomSubs() {
@@ -99,6 +129,7 @@ export const useSubtitleStore = create(
     })),
     {
       name: "__MW::subtitles",
+      merge: (persisted, current) => merge({}, current, persisted),
     },
   ),
 );

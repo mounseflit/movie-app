@@ -1,4 +1,4 @@
-import { Qualities } from "@movie-web/providers";
+import { Qualities, Stream } from "@movie-web/providers";
 
 import { QualityStore } from "@/stores/quality";
 
@@ -14,16 +14,22 @@ export type SourceFileStream = {
 export type LoadableSource = {
   type: StreamType;
   url: string;
+  headers?: Stream["headers"];
+  preferredHeaders?: Stream["preferredHeaders"];
 };
 
 export type SourceSliceSource =
   | {
       type: "file";
       qualities: Partial<Record<SourceQuality, SourceFileStream>>;
+      headers?: Stream["headers"];
+      preferredHeaders?: Stream["preferredHeaders"];
     }
   | {
       type: "hls";
       url: string;
+      headers?: Stream["headers"];
+      preferredHeaders?: Stream["preferredHeaders"];
     };
 
 const qualitySorting: Record<SourceQuality, number> = {
@@ -32,7 +38,7 @@ const qualitySorting: Record<SourceQuality, number> = {
   "480": 20,
   "720": 30,
   "1080": 40,
-  "4k": 25, // 4k has lower priority, you need faster internet for it
+  "4k": 35, // 4k has lower priority, you need faster internet for it
 };
 const sortedQualities: SourceQuality[] = Object.entries(qualitySorting)
   .sort((a, b) => b[1] - a[1])

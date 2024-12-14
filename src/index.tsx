@@ -10,7 +10,7 @@ import { createRoot } from "react-dom/client";
 import { HelmetProvider } from "react-helmet-async";
 import { useTranslation } from "react-i18next";
 import { BrowserRouter, HashRouter } from "react-router-dom";
-import { useAsync } from "react-use";
+import { useAsync, useAsyncFn } from "react-use";
 
 import { Button } from "@/components/buttons/Button";
 import { Icon, Icons } from "@/components/Icon";
@@ -23,15 +23,17 @@ import { MigrationPart } from "@/pages/parts/migrations/MigrationPart";
 import { LargeTextPart } from "@/pages/parts/util/LargeTextPart";
 import App from "@/setup/App";
 import { conf } from "@/setup/config";
-import i18n from "@/setup/i18n";
 import { useAuthStore } from "@/stores/auth";
 import { BookmarkSyncer } from "@/stores/bookmarks/BookmarkSyncer";
-import { useLanguageStore } from "@/stores/language";
+import { changeAppLanguage, useLanguageStore } from "@/stores/language";
 import { ProgressSyncer } from "@/stores/progress/ProgressSyncer";
 import { SettingsSyncer } from "@/stores/subtitles/SettingsSyncer";
 import { ThemeProvider } from "@/stores/theme";
-import { TurnstileProvider } from "@/stores/turnstile";
 
+import {
+  extensionInfo,
+  isExtensionActiveCached,
+} from "./backend/extension/messaging";
 import { initializeChromecast } from "./setup/chromecast";
 import { initializeOldStores } from "./stores/__old/migrations";
 
@@ -55,6 +57,7 @@ function ErrorScreen(props: {
   children: ReactNode;
   showResetButton?: boolean;
   showLogoutButton?: boolean;
+  showReloadButton?: boolean;
 }) {
   const { t } = useTranslation();
   const { logout } = useAuth();
@@ -92,6 +95,13 @@ function ErrorScreen(props: {
           </Button>
         </div>
       ) : null}
+      {props.showReloadButton ? (
+        <div className="mt-6">
+          <Button theme="secondary" onClick={() => window.location.reload()}>
+            {t("screens.loadingUserError.reload")}
+          </Button>
+        </div>
+      ) : null}
     </LargeTextPart>
   );
 }
@@ -110,6 +120,7 @@ function AuthWrapper() {
       <ErrorScreen
         showResetButton={isCustomUrl}
         showLogoutButton={!isCustomUrl}
+        showReloadButton={!isCustomUrl}
       >
         {t(
           isCustomUrl
@@ -123,7 +134,7 @@ function AuthWrapper() {
 
 function MigrationRunner() {
   const status = useAsync(async () => {
-    i18n.changeLanguage(useLanguageStore.getState().language);
+    changeAppLanguage(useLanguageStore.getState().language);
     await initializeOldStores();
   }, []);
   const { t } = useTranslation();
@@ -141,15 +152,32 @@ function TheRouter(props: { children: ReactNode }) {
   return <HashRouter>{props.children}</HashRouter>;
 }
 
+// Checks if the extension is installed
+function ExtensionStatus() {
+  const { t } = useTranslation();
+  const [state] = useAsyncFn(async () => {
+    if (!isExtensionActiveCached) {
+      return extensionInfo();
+    }
+  });
+
+  if (state.loading) {
+    return <LoadingScreen type="lazy" />;
+  }
+  if (state.error) {
+    return <ErrorScreen>{t("screens.loadingUserError.reload")}</ErrorScreen>;
+  }
+  return null;
+}
 const container = document.getElementById("root");
 const root = createRoot(container!);
 
 root.render(
   <StrictMode>
     <ErrorBoundary>
-      <TurnstileProvider />
       <HelmetProvider>
         <Suspense fallback={<LoadingScreen type="lazy" />}>
+          <ExtensionStatus />
           <ThemeProvider applyGlobal>
             <ProgressSyncer />
             <BookmarkSyncer />

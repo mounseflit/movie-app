@@ -1,58 +1,55 @@
+# Sudo-Flix
+[![Sudo-Flix Image](.github/Sudo-Flix.png)](https://docs.undi.rest)  
 
-<p align="center"><img align="center" width="280" src="./.github/logo-light.svg#gh-light-mode-only"/></p>
-<p align="center">
-  <img src="https://skillicons.dev/icons?i=react,vite,ts" />
-  <br/>
-  <a href="https://movie-web-me.vercel.app"><kbd>🟢 website</kbd></a>
-</p>
-<br/><br/>
+**I *do not* endorse piracy of any kind I simply enjoy programming and large user counts.**
 
-# ⚡What is movie-web?
+## Links And Resources
+| Service        | Link                                                             | Source Code                                              |
+|----------------|------------------------------------------------------------------|----------------------------------------------------------|
+| Sudo-Flix Docs | [sudo-docs](https://docs.undi.rest)                          | [source code](https://github.com/sussy-code/docs)        |
+| Extension      | [extension](https://docs.undi.rest/extension)                | [source code](https://github.com/sussy-code/browser-ext) |
+| Proxy          | [sudo-proxy](https://sudo-proxy.up.railway.app)              | [source code](https://github.com/sussy-code/sudo-proxy)  |             
+| Backend        | [sudo-backend](https://backend.undi.rest)                    | [source code](https://github.com/sussy-code/backend)     |
+| Frontend       | [sudo-flix](https://docs.undi.rest/instances)                | [source code](https://github.com/sussy-code/smov)        |
+| Weblate        | [sudo-weblate](https://docs.undi.rest/links/weblate)         | [source code](https://github.com/sussy-code/docs)        |
 
-movie-web is a web app for watching movies easily. Check it out at <a href="https://movie-web-me.vercel.app"><kbd>movie-web-me.vercel.app</kbd></a>.
+***I provide these if you are not able to host yourself, though I do encourage hosting the frontend.***
 
-This service works by displaying video files from third-party providers inside an intuitive and aesthetic user interface.
 
-# 🔥Features
+## Referrers
+- [FMHY (Voted as #1 multi-server streaming site of 2024)](https://fmhy.net)
+- [Piracy Subreddit Megathread](https://www.reddit.com/r/Piracy/s/iymSloEpXn)
+- [Toon's Instances](https://erynith.github.io/movie-web-instances)
+- [Entertainment Empire](https://discord.gg/8NSDNEMfja)
+- Search Engines: DuckDuckGo, Bing, Google
+- Rentry.co
 
-- Automatic saving of progress - optionally synced to an account.
-- Bookmark shows or movies, keep track of what you want to watch.
-- Minimalistic interface that only shows whats required - no algorithm to consume you.
 
-## 🍄 Philosophy
-
-This project is meant to be simple and easy to use. Keep features minimal but polished.
-We do not want this project to be yet another bulky streaming site, instead it aims for minimalism.
-
-On top of that, hosting should be as cheap and simple as possible. Just a static website with a proxy, with an optional backend if you want cross-device syncing.
-
-Content is fetched from third parties and scraping is fully done on the client. This means that the hoster has no files or media on their server. All files are streamed directly from the third parties.
-
-## ⚠️ Limitations
-
-- Due to being a static site, there can be no SSR
-- To keep it cheap to host, amount of proxied requests need to be kept to a minimum
-- Also to keep it cheap, no content must ever be streamed through the proxy. So only streams not protected by CORS headers.
-
-# 🧬 Running locally for development
-
-To run locally, you must first clone the repository. After that run the following commands in the root of the repository:
+## Running Locally
+Type the following commands into your terminal / command line to run Sudo-Flix locally
 ```bash
+git clone https://github.com/sussy-code/smov.git
+cd smov
+git pull
 pnpm install
 pnpm run dev
 ```
+Then you can visit the local instance [here](http://localhost:5173) or, at local host on port 5173.
 
-You have to also make an `.env` file to configure your environment. Inspire it from the content of `example.env`.
 
-To build production files, run:
+## Updating a sudo-flix Instance
+To update a sudo-flix instance you can type the below commands into a terminal at the root of your project.
 ```bash
-pnpm build
+git remote add upstream https://github.com/sussy-code/smov.git
+git fetch upstream # Grab the contents of the new remote source
+git checkout <YOUR_MAIN_BRANCH>  # Most likely this would be `origin/main`
+git merge upstream/main
+# * Fix any conflicts present during merge *
+git add .  # Add all changes made during merge and conflict fixing
+git commit -m "Update sudo-flix instance (merge upstream/main)"
+git push  # Push to YOUR repository
 ```
 
-> [!TIP]
-> You must use pnpm (`npm i -g pnpm`) and run NodeJS 20
 
-
-
-## 🤝 Thanks to all Contributors
-This project would not be possible without our amazing contributors and the community. Thanks a lot! Keep rocking 🍻.
+## Contact Me
+**Email:** *[dev@sudo-flix.lol](mailto:dev@sudo-flix.lol)* 

@@ -24,8 +24,9 @@ const captioningPackages = [
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd());
   return {
+    base: env.VITE_BASE_URL || '/',
     plugins: [
-      million.vite({ auto: true }),
+      million.vite({ auto: true, mute: true }),
       handlebars({
         vars: {
           opensearchEnabled: env.VITE_OPENSEARCH_ENABLED === "true",
@@ -58,7 +59,7 @@ export default defineConfig(({ mode }) => {
         registerType: "autoUpdate",
         workbox: {
           maximumFileSizeToCacheInBytes: 4000000, // 4mb
-          globIgnores: ["**ping.txt**"],
+          globIgnores: ["!assets/**/*"],
         },
         includeAssets: [
           "favicon.ico",
@@ -66,9 +67,9 @@ export default defineConfig(({ mode }) => {
           "safari-pinned-tab.svg",
         ],
         manifest: {
-          name: "movie-web",
-          short_name: "movie-web",
-          description: "The place for your favourite movies & shows",
+          name: "sudo-flix",
+          short_name: "sudo-flix",
+          description: "Watch your favorite shows and movies for free with no ads ever! (っ'ヮ'c)",
           theme_color: "#120f1d",
           background_color: "#120f1d",
           display: "standalone",
@@ -122,30 +123,29 @@ export default defineConfig(({ mode }) => {
     build: {
       sourcemap: true,
       rollupOptions: {
-        output: {
-          manualChunks(id: string) {
-            if (id.includes("@sozialhelden+ietf-language-tags")) {
-              return "ietf-language-tags";
-            }
-            if (id.includes("hls.js")) {
-              return "hls";
-            }
-            if (id.includes("node-forge") || id.includes("crypto-js")) {
-              return "auth";
-            }
-            if (id.includes("locales") && !id.includes("en.json")) {
-              return "locales";
-            }
-            if (id.includes("react-dom")) {
-              return "react-dom";
-            }
-            if (id.includes("Icon.tsx")) {
-              return "Icons";
-            }
-            const isCaptioningPackage = captioningPackages.some(packageName => id.includes(packageName));
-            if (isCaptioningPackage) {
-              return "caption-parsing";
-            }
+        output: {},
+        manualChunks(id: string) {
+          if (id.includes("@sozialhelden+ietf-language-tags") || id.includes("country-language")) {
+            return "language-db";
+          }
+          if (id.includes("hls.js")) {
+            return "hls";
+          }
+          if (id.includes("node-forge") || id.includes("crypto-js")) {
+            return "auth";
+          }
+          if (id.includes("locales") && !id.includes("en.json")) {
+            return "locales";
+          }
+          if (id.includes("react-dom")) {
+            return "react-dom";
+          }
+          if (id.includes("Icon.tsx")) {
+            return "Icons";
+          }
+          const isCaptioningPackage = captioningPackages.some(packageName => id.includes(packageName));
+          if (isCaptioningPackage) {
+            return "caption-parsing";
           }
         }
       }

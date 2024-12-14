@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import { Link } from "react-router-dom";
+import { Link, To, useNavigate } from "react-router-dom";
 
 import { NoUserAvatar, UserAvatar } from "@/components/Avatar";
 import { IconPatch } from "@/components/buttons/IconPatch";
@@ -21,7 +21,13 @@ export interface NavigationProps {
 
 export function Navigation(props: NavigationProps) {
   const bannerHeight = useBannerSize();
+  const navigate = useNavigate();
   const { loggedIn } = useAuth();
+
+  const handleClick = (path: To) => {
+    window.scrollTo(0, 0);
+    navigate(path);
+  };
 
   return (
     <>
@@ -83,8 +89,9 @@ export function Navigation(props: NavigationProps) {
               <Link
                 className="block tabbable rounded-full text-xs ssm:text-base"
                 to="/"
+                onClick={() => window.scrollTo(0, 0)}
               >
-                <BrandPill clickable />
+                <BrandPill clickable header />
               </Link>
               <a
                 href={conf().DISCORD_LINK}
@@ -101,6 +108,13 @@ export function Navigation(props: NavigationProps) {
                 className="text-xl text-white tabbable rounded-full"
               >
                 <IconPatch icon={Icons.GITHUB} clickable downsized />
+              </a>
+              <a
+                onClick={() => handleClick("/discover")}
+                rel="noreferrer"
+                className="text-xl text-white tabbable rounded-full"
+              >
+                <IconPatch icon={Icons.RISING_STAR} clickable downsized />
               </a>
             </div>
             <div className="relative pointer-events-auto">

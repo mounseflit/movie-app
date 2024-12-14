@@ -47,6 +47,7 @@ function Dmca() {
   const { t } = useTranslation();
 
   if (!shouldHaveDmcaPage()) return null;
+  if (window.location.hash === "#/dmca") return null;
 
   return (
     <FooterLink to="/dmca" icon={Icons.DRAGON}>
@@ -79,6 +80,9 @@ export function Footer() {
           </FooterLink>
           <FooterLink icon={Icons.DISCORD} href={conf().DISCORD_LINK}>
             {t("footer.links.discord")}
+          </FooterLink>
+          <FooterLink icon={Icons.TWITTER} href={conf().TWITTER_LINK}>
+            {t("footer.links.twitter")}
           </FooterLink>
           <div className="inline md:hidden">
             <Dmca />

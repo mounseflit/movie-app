@@ -9,7 +9,7 @@
 
 # ⚡What is movie-web?
 
-movie-web is a web app for watching movies easily. Check it out at <a href="https://movie-web-me.vercel.app"><kbd>movie-web-ma.vercel.app</kbd></a>.
+movie-web is a web app for watching movies easily. Check it out at <a href="https://movie-web-me.vercel.app"><kbd>movie-web-me.vercel.app</kbd></a>.
 
 This service works by displaying video files from third-party providers inside an intuitive and aesthetic user interface.
 
@@ -56,7 +56,7 @@ pnpm build
 
 A simple guide has been written to assist in hosting your own instance of movie-web. Check it out below
 
-|[Selfhosting guide](https://docs.movie-web-ma.vercel.app)|
+|[Selfhosting guide](https://docs.movie-web-me.vercel.app)|
 |---|
 
 ## 🤝 Thanks to all Contributors

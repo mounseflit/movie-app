@@ -52,12 +52,7 @@ pnpm build
 > [!TIP]
 > You must use pnpm (`npm i -g pnpm`) and run NodeJS 20
 
-# 🥔 Selfhosting
 
-A simple guide has been written to assist in hosting your own instance of movie-web. Check it out below
-
-|[Selfhosting guide](https://docs.movie-web-me.vercel.app)|
-|---|
 
 ## 🤝 Thanks to all Contributors
 This project would not be possible without our amazing contributors and the community. Thanks a lot! Keep rocking 🍻.

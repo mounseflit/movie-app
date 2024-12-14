@@ -1,7 +1,7 @@
 import { ofetch } from "ofetch";
 
 import { getApiToken, setApiToken } from "@/backend/helpers/providerApi";
-import { getLoadbalancedProxyUrl } from "@/utils/providers";
+import { getLoadbalancedProxyUrl } from "@/backend/providers/fetchers";
 
 type P<T> = Parameters<typeof ofetch<T, any>>;
 type R<T> = ReturnType<typeof ofetch<T, any>>;
@@ -69,7 +69,12 @@ export async function singularProxiedFetch<T>(
     onResponse(context) {
       const tokenHeader = context.response.headers.get("X-Token");
       if (tokenHeader) setApiToken(tokenHeader);
-      ops.onResponse?.(context);
+
+      if (Array.isArray(ops.onResponse)) {
+        ops.onResponse.forEach((hook) => hook(context));
+      } else {
+        ops.onResponse?.(context);
+      }
     },
   });
 }
